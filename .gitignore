@@ -1,4 +1,5 @@
-Tar_Mat_Root_Files
+*.tar
+*.mat
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
