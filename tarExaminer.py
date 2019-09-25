@@ -5,6 +5,7 @@ Created on Thu Sep 12 14:57:15 2019
 @author: luket
 """
 #tarfile.open("root_data\\images.tar")
+#https://www.tensorflow.org/tutorials/keras/basic_classification
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 # TensorFlow and tf.keras
