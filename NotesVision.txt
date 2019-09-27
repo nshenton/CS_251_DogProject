@@ -1,0 +1,18 @@
+
+Notes from image recognition lecture:
+
+n = width
+m = length
+Color images composed of an n x m x 3 array for each pixel (r, g, b)
+
+Recommended library for python: opencv
+
+Easiest way is to us keras (python library on top of tensorflow)
+Install tensorflow
+Import tensorflow as tf
+From tensorflow import keras
+
+You must load your data from the hard drive into training images and training labels
+
+Convert all data from the image (n x m pixels) into a single feature vector [0, ... , n x m]
+Normalize rgb values by dividing by 255
