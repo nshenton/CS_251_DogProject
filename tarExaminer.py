@@ -51,9 +51,12 @@ for imgName in imageNames:
         cropped_img = img.crop((xmin,ymin,xmax,ymax))
         #resize the image
         resized_img = cropped_img.resize((250, 250))
+        resized_img.show()
         #show the image
-        data = list(resized_img.getdata())
-        data = np.array(data)/255.0
+        image_array = np.array(resized_img)
+        norm_image = image_array/255.0
+        print(norm_image.shape)
+        print(norm_image)
         
         
     i+=1
