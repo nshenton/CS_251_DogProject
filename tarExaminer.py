@@ -52,9 +52,15 @@ for imgName in imageNames:
         #resize the image
         resized_img = cropped_img.resize((250, 250))
         #show the image
+<<<<<<< HEAD
         data = list(resized_img.getdata())
         data = np.array(data)/255.0
         
+=======
+        image_array = np.array(resized_img)
+        norm_image = np.clip(image_array/255.0, 0.0, 1.0) # 255 = max of the value of a pixel
+        norm_image.show()
+>>>>>>> LT
         
     i+=1
 #https://medium.com/tensorflow/hello-deep-learning-fashion-mnist-with-keras-50fcff8cd74a
