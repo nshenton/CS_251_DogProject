@@ -19,7 +19,7 @@ import PIL
 from matplotlib import image
 from matplotlib import pyplot
 #root directory
-rootDir = "root_data/images/n02085620-Chihuahua/"
+rootDir = "root_data/images/n02098286-West_Highland_white_terrier/"
 #list of image names
 imageNames = (os.listdir(rootDir))
 #dont blow up my computer
@@ -27,11 +27,11 @@ i = 0
 #loop through each image in file
 for imgName in imageNames:
     #for testing
-    if i < 5:
+    if i < 1:
         #grab the image
         img =  PIL.Image.open(rootDir + imgName)
         #get the bounding box annotation
-        f = open('root_data/Annotation/n02085620-Chihuahua/'+imgName[:-4], "r")
+        f = open('root_data/Annotation/n02098286-West_Highland_white_terrier/'+imgName[:-4], "r")
         text = f.readlines()
         xmin = 0
         xmax = 250
@@ -52,7 +52,10 @@ for imgName in imageNames:
         #resize the image
         resized_img = cropped_img.resize((250, 250))
         #show the image
-        resized_img.show()
+        image_array = np.array(resized_img)
+        norm_image = np.clip(image_array/255.0, 0.0, 1.0) # 255 = max of the value of a pixel
+        norm_image.show()
+        
     i+=1
 #https://medium.com/tensorflow/hello-deep-learning-fashion-mnist-with-keras-50fcff8cd74a
 #this section needs to be recoded
