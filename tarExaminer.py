@@ -53,31 +53,25 @@ for oneDir in dirs:
         cropped_img = img.crop((xmin,ymin,xmax,ymax))
         #resize the image
         resized_img = cropped_img.resize((250, 250))
-<<<<<<< HEAD
+
         resized_img.show()
         #show the image
-<<<<<<< HEAD
-<<<<<<< HEAD
-        data = list(resized_img.getdata())
-        data = np.array(data)/255.0
-=======
+
         image_array = np.array(resized_img)
         norm_image = image_array/255.0
         print(norm_image.shape)
         print(norm_image)
->>>>>>> fa6f142f313efb156b72dcaeedfdfaa5af9866ef
-        
-=======
+
         image_array = np.array(resized_img)
         norm_image = np.clip(image_array/255.0, 0.0, 1.0) # 255 = max of the value of a pixel
         norm_image.show()
->>>>>>> LT
+
         
     i+=1
 #https://medium.com/tensorflow/hello-deep-learning-fashion-mnist-with-keras-50fcff8cd74a
 #this section needs to be recoded
 #(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
-=======
+
         #normalize the image
         image_array = np.array(resized_img)
         norm_image = image_array/255.0 # 255 = max of the value of a pixel
@@ -99,7 +93,7 @@ model = keras.Sequential([
     keras.layers.Dense(128, activation=tf.nn.relu),
     keras.layers.Dense(10, activation=tf.nn.softmax)
 ])
->>>>>>> LT
+
 #
 model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
