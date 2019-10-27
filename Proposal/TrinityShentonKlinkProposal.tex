@@ -10,6 +10,7 @@
 \usepackage{color}
 \usepackage{textcomp}
 \newcommand{\todo}[1]{\noindent\textcolor{blue}{{$\Box$ #1}}}
+
 \title{Project Proposal}
 \date{\today}
 \author{Luke Trinity and Nat Shenton \\  CS 254}
@@ -37,7 +38,11 @@ First we will convert each of the images in the Stanford Dogs dataset \cite{khos
 \subsection{Methodology}
 
 \subsection{Results}
-\todo{place results in paper}
+ \begin{figure}[h!]
+ \centering
+  \includegraphics[width=0.7\textwidth]{results}
+  \caption{The wieght precision and recall the classification from Keras model}
+  \end{figure}
 \subsection{Discussion}
 
  
@@ -46,6 +51,9 @@ First we will convert each of the images in the Stanford Dogs dataset \cite{khos
 In the initial article utilizing the novel dataset by Khosla et al. \cite{khosla2011novel}, the mean accuracy reached 22\% when 100 training images were utilized within the SIFT methodology. Liu et al. \cite{liu2012dog} reached 69\% accuracy, with greater success than Khosla et al. \cite{khosla2011novel} due to their partially localized approach.  We hope to leverage the bounding boxes and augment the work of Liu et al. \cite{liu2012dog}, possibly improving on their methodology to achieve higher accuracy. Several bounding box approaches are currently being reviewed, although all are endlessly modifiable from simple image segmentation. One is a slight adaptation to a method often employed for training algorithms to images of different shade and dimension called DeepCut.  \cite{rajchl2016deepcut} There are several standard variations on the basic DeepCut methodology, which hones in on the nature and dimension of the bounding in a cookie-cutter, traced-out way as opposed to any kind of geometric shape. A very similar methodology is known as GrabCut which does not need to even be a single, continuous cookie-cutter-style line bounded around a desired segment of an image. GrabCut is standardly designed to grab multiple disparate segments of an image at once for a single, desired analysis. In addition to one of these approaches or some modification thereof, we plan to incorporate some aspect of KL Loss to account for localization uncertainty which could greatly assist with interference from background objects such as people, buildings, trees, etc. \cite{he2019bounding} There are, of course, a number of other modifiable ‘standard’ or ‘familiar’ combinations of approaches to deal with bounding and uncertainty to also be explored. Even so, most will lead to an approximately similar result if implemented correctly. Deep/GrabCut is simple and can narrow the selected image segment in a convenient, efficient manner. KL Loss will be further researched and incorporated to deal with expected shading difficulties, image blurring and background/foreground image ‘noise’.
 
 \section{Next Steps}
+
+These initial results show the next steps, one is to improve the learning algorithm.  The initial Keras Neural network shows the classification of dog breeds get worse and worse as the more breeds get introduced.  From here, the main goal is to improve this algorithm.  This will be done thru cross-validation and using the Keras pre trained Neural Networks.  These networks 
+
 \todo{use cv to get hyperparameters}\\
 \todo{work on memory issue possibly the vacc}
 
