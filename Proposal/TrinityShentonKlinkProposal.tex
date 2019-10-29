@@ -62,13 +62,11 @@ In the initial article utilizing the novel dataset by Khosla et al. \cite{khosla
 
 \section{Next Steps}
 
-The initial Neural network trained using Keras shows the classification of dog breeds get worse and worse as the more breeds get introduced.  From these results there are two main directions this project will have to go.  The first is it move this project onto the VACC, which should avoid the memory error when running any more than a 7 breed classification which occurred on the local machine.  We will test the performance of both the Bluemoon and DeepGreen supercomputer clusters to scale the model  from the 7 breed classification to the 120 breed classification.  The model will return the prediction probability from the most possible breeds. This will be Luke's main task.
+The initial Neural network trained using Keras shows the classification of dog breeds gets worse and worse as more breeds are introduced. From these results there are two main directions this project will have to go.  The first is it move this project onto the VACC, which should avoid the memory error when running any more than a 7 breed classification which occurred on the local machine.  We will test the performance of both the Bluemoon and DeepGreen supercomputer clusters to scale the model from the 7 breed classification to the 120 breed classification.  The model will return the prediction probability vector for all breeds. This will be Luke's main task.
 
-The second task will be to improve the model.  Using cross validation, the pre-weighted neural networks from the Keras libraries will be used to improve the model. Keras has an extensive library of pre-weighted networks specifically designed from image classifications.   This will include the tuning of hyper parameters to improve the prediction probability thru cross validation, as well as going inside the black box that is the neural network and experimenting with different number and types of sequential layers.  This will be Nat's main task.  
+The second task will be to improve the model.  Using cross validation, the pre-weighted neural networks from the Keras libraries will be used to improve the model. Keras has an extensive library of pre-weighted networks specifically designed from image classifications. This will include the tuning of hyper parameters to improve the prediction probability through cross validation, as well as going inside the black box that is the neural network and experimenting with different numbers and types of sequential layers.  This will be Nat's main task.  
 
 Once the algorithm has been optimized, the final step of the project will be a user interface where a user will upload an image of their dog, and the algorithm will return the prediction probability.  This will either be done with a simple HTML page or using the Unity platform. 
-
-
 
 \section{Code and Dataset}
 
