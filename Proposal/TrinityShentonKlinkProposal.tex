@@ -1,4 +1,4 @@
-\documentclass{article}    
+\documentclass[12pt]{article}    
 \usepackage[left=2cm, right=2cm, top=2cm, bottom= 2cm]{geometry} 
 \usepackage{hyperref}
 \usepackage{graphicx,epsfig,verbatim,enumerate}
@@ -52,10 +52,15 @@ In the initial article utilizing the novel dataset by Khosla et al. \cite{khosla
 
 \section{Next Steps}
 
-These initial results show the next steps, one is to improve the learning algorithm.  The initial Keras Neural network shows the classification of dog breeds get worse and worse as the more breeds get introduced.  From here, the main goal is to improve this algorithm.  This will be done thru cross-validation and using the Keras pre trained Neural Networks.  These networks 
+These initial results show the next steps, one is to improve the learning algorithm.  The initial Neural network trained using Keras shows the classification of dog breeds get worse and worse as the more breeds get introduced.  From these results there are two main directions this project will have to go.  The first is it move this project onto the VACC as there when running any more than a 6 breed classification there was a memory error on the local machine.  The next step will be to utilize the VACC, once the current model is working on the VACC, the model will be scaled from the 6 breed classification to the 120 breed classification.  The model will return the prediction probability from the most possible breeds.  This will be Luke's main task.
 
-\todo{use cv to get hyperparameters}\\
-\todo{work on memory issue possibly the vacc}
+The second task will be to improve the model.  Thru cross validation, the pre weighted neural networks from the Keras libraries will be used to improve the model. Keras has an extensive library of pre weighted networks specifically designed from image classifications.   This will include the tuning of hyper parameters to improve the prediction probability thru cross validation.  This will be Nat's main task.  
+
+Once the algorithm has been optimized, the final step of the project will be a user interface where a user will upload a image of their dog, and the algrorithm will return the prediction probability.  This will either be down with a simple HTML page or thru Unity. 
+
+%\todo{use cv to get hyperparameters, look into weighted hyperparameters}\\
+%\todo{work on memory issue possibly the vacc, get working on the vacc - scale up}\\
+%\todo{have a tool online where there is a drag and drop image.  Build a unity app?  Or Html webpage
 
 \section{Code and Dataset}
 
