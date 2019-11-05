@@ -17,13 +17,11 @@ import matplotlib.pyplot as plt
 #not sure what this is doing, see tutorial: https://www.tensorflow.org/tutorials/load_data/images
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 #source of the images locally
-data_dir = pathlib.Path("C:/Users/luket/Desktop/CS_251_DogProject/root_data/Images")
+data_dir = pathlib.Path("C:/Users/luket/Desktop/CS_251_DogProject/root_data/Images/Images")
 #how many images do we have
 image_count = len(list(data_dir.glob('*/*.jpg')))
-print(image_count)
 #grab class names
 CLASS_NAMES = np.array([item.name for item in data_dir.glob('*') if item.name != "LICENSE.txt"])
-print(CLASS_NAMES)
 #show a few photos
 #mexicanHairless = list(data_dir.glob('n02113978-Mexican_hairless/*'))
 #for image_path in mexicanHairless[:3]:
@@ -50,4 +48,4 @@ def show_batch(image_batch, label_batch):
       plt.title(CLASS_NAMES[label_batch[n]==1][0].title())
       plt.axis('off')
 image_batch, label_batch = next(train_data_gen)
-show_batch(image_batch, label_batch)
+#show_batch(image_batch, label_batch)
