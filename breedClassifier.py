@@ -7,7 +7,9 @@ Created on Thu Sep 12 14:57:15 2019
 #https://www.tensorflow.org/tutorials/keras/basic_classification
 from __future__ import absolute_import, division, print_function, unicode_literals
 from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
 import tensorflow as tf
+import pandas as pd
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
@@ -99,7 +101,20 @@ def pickleData(maxBreeds):
             #normalize the image
             image_array = np.array(resized_img)
             norm_image = image_array/255.0 # 255 = max of the value of a pixel
-            dogPictureMatrix[i] = norm_image
+            r = norm_image[:,:,0].reshape(1,62500)
+            g = norm_image[:,:,1].reshape(1,62500)
+            b = norm_image[:,:,2].reshape(1,62500)
+            data = pd.DataFrame(r.T,columns =['R'])
+            gDat = pd.DataFrame(g.T,columns =['R']) 
+            bDat = pd.DataFrame(b.T,columns =['B'])
+            frames = [rDat, gDat, bDat]
+            result = pd.concat(frames)
+            print(result)
+            break
+            pca = PCA(n_components = 2)
+            principalComponents = pca.fit_transform(rgb)
+            print(principalComponents.shape)
+            dogPictureMatrix[i] = principalComponents
             i+=1
             currentBreed+=1
             if currentBreed > maxBreeds:
@@ -130,8 +145,8 @@ def splitAndTest(X, y, maxBreeds, save):
     if save:
         #dump out the trained model
         model.save(str(maxBreeds) + "_breed_classifier.m")
-totalBreeds = 120
-pickleData(totalBreeds)
+#totalBreeds = 2
+#pickleData(totalBreeds)
 #declare X to be the data matrix
 #data = pickle.load( open( "datamat.p", "rb" ) )
 #target = pickle.load( open( "targetvec.p", "rb" ) )
