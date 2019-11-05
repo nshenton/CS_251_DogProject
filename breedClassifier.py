@@ -19,6 +19,7 @@ import time as time
 import pickle
 from keras import metrics
 import random
+import pickle
 #end import section
 #how many breeds to build into the classifier
 def pickleData(maxBreeds):
@@ -102,8 +103,10 @@ def pickleData(maxBreeds):
             i+=1
             currentBreed+=1
             if currentBreed > maxBreeds:
-                return [dogPictureMatrix,y]
-def splitAndTest(X, y, save):
+                pickle.dump( dogPictureMatrix, open( "datamat.p", "wb" ) )
+                pickle.dump( y, open( "targetvec.p", "wb" ) )
+                break
+def splitAndTest(X, y, maxBreeds, save):
     #split the data into train/test/validation
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     X_train, X_val, y_train, y_val   = train_test_split(X_train, y_train, test_size=0.2, random_state=1)
@@ -114,7 +117,7 @@ def splitAndTest(X, y, save):
     model = keras.Sequential([
         keras.layers.Flatten(input_shape=(250, 250,3)),
         keras.layers.Dense(128, activation=tf.nn.relu),
-        keras.layers.Dense(totalBreeds, activation=tf.nn.softmax)
+        keras.layers.Dense(maxBreeds, activation=tf.nn.softmax)
     ])
     #compile the model
     model.compile(optimizer='adam',
@@ -126,8 +129,10 @@ def splitAndTest(X, y, save):
     print(results.history.get('acc')[-1])
     if save:
         #dump out the trained model
-        model.save(str(totalBreeds) + "_breed_classifier.m")
-totalBreeds = 3
+        model.save(str(maxBreeds) + "_breed_classifier.m")
+totalBreeds = 120
+pickleData(totalBreeds)
 #declare X to be the data matrix
-data,target = pickleData(totalBreeds)
-splitAndTest(data,target, False)
+#data = pickle.load( open( "datamat.p", "rb" ) )
+#target = pickle.load( open( "targetvec.p", "rb" ) )
+#splitAndTest(data,target, totalBreeds, False)
