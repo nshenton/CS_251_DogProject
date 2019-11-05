@@ -24,13 +24,12 @@ import random
 import pickle
 import os
 #end import section
-#how many breeds to build into the classifier
-#generate directory names for specified number of breeds
-dirs = os.listdir("root_data/images/")[:]
+#generate directory names for classes
+dirs = os.listdir("root_data/images/Images")[:]
 #for each dog breed (grouped by directory)
 for oneDir in dirs:
     #adjust the actual folder name to index 
-    oneDir = "root_data/images/"+str(oneDir)
+    oneDir = "root_data/images/Images/"+str(oneDir)
     #get all the image names
     imageNames = (os.listdir(oneDir))
     #loop through each image
@@ -39,7 +38,7 @@ for oneDir in dirs:
         img =  PIL.Image.open(oneDir + "/" + imgName)
         print(oneDir + "/" + imgName)
         #get the bounding box annotation
-        f = open('root_data/Annotation/' + oneDir[17:] + "/"+imgName[:-4], "r")
+        f = open('root_data/Annotation/' + oneDir[24:] + "/"+imgName[:-4], "r")
         text = f.readlines()
         xmin = 0
         xmax = 250
@@ -58,4 +57,4 @@ for oneDir in dirs:
         #crop the image
         cropped_img = img.crop((xmin,ymin,xmax,ymax))
         #save the image
-        cropped_img.save(oneDir + "/" + imgName)
+        #cropped_img.save(oneDir + "/" + imgName)
