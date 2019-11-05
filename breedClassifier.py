@@ -22,6 +22,7 @@ import pickle
 from keras import metrics
 import random
 import pickle
+import os
 #end import section
 #how many breeds to build into the classifier
 def pickleData(maxBreeds):
@@ -71,6 +72,7 @@ def pickleData(maxBreeds):
     for oneDir in dirs:
         #adjust the actual folder name to index 
         oneDir = "root_data/images/"+str(oneDir)
+        croppedDir = "root_data/imagescropped/"+str(oneDir)
         #get all the image names
         imageNames = (os.listdir(oneDir))
         #loop through each image
@@ -96,30 +98,31 @@ def pickleData(maxBreeds):
             f.close()
             #crop the image
             cropped_img = img.crop((xmin,ymin,xmax,ymax))
+            cropped_img.save(croppedDir + "/" + imgName)
             #resize the image
-            resized_img = cropped_img.resize((250, 250))
+            #resized_img = cropped_img.resize((250, 250))
             #normalize the image
-            image_array = np.array(resized_img)
-            norm_image = image_array/255.0 # 255 = max of the value of a pixel
-            r = norm_image[:,:,0].reshape(1,62500)
-            g = norm_image[:,:,1].reshape(1,62500)
-            b = norm_image[:,:,2].reshape(1,62500)
-            data = pd.DataFrame(r.T,columns =['R'])
-            gDat = pd.DataFrame(g.T,columns =['R']) 
-            bDat = pd.DataFrame(b.T,columns =['B'])
-            frames = [rDat, gDat, bDat]
-            result = pd.concat(frames)
-            print(result)
-            break
-            pca = PCA(n_components = 2)
-            principalComponents = pca.fit_transform(rgb)
-            print(principalComponents.shape)
-            dogPictureMatrix[i] = principalComponents
-            i+=1
+            #image_array = np.array(resized_img)
+            #norm_image = image_array/255.0 # 255 = max of the value of a pixel
+            #r = norm_image[:,:,0].reshape(1,62500)
+            #g = norm_image[:,:,1].reshape(1,62500)
+            #b = norm_image[:,:,2].reshape(1,62500)
+            #data = pd.DataFrame(r.T,columns =['R'])
+            #gDat = pd.DataFrame(g.T,columns =['R']) 
+            #bDat = pd.DataFrame(b.T,columns =['B'])
+            #frames = [rDat, gDat, bDat]
+            #result = pd.concat(frames)
+            #print(result)
+            #break
+            #pca = PCA(n_components = 2)
+            #principalComponents = pca.fit_transform(rgb)
+            #print(principalComponents.shape)
+            #dogPictureMatrix[i] = principalComponents
+            #i+=1
             currentBreed+=1
             if currentBreed > maxBreeds:
-                pickle.dump( dogPictureMatrix, open( "datamat.p", "wb" ) )
-                pickle.dump( y, open( "targetvec.p", "wb" ) )
+                #pickle.dump( dogPictureMatrix, open( "datamat.p", "wb" ) )
+                #pickle.dump( y, open( "targetvec.p", "wb" ) )
                 break
 def splitAndTest(X, y, maxBreeds, save):
     #split the data into train/test/validation
@@ -145,8 +148,8 @@ def splitAndTest(X, y, maxBreeds, save):
     if save:
         #dump out the trained model
         model.save(str(maxBreeds) + "_breed_classifier.m")
-#totalBreeds = 2
-#pickleData(totalBreeds)
+totalBreeds = 2
+pickleData(totalBreeds)
 #declare X to be the data matrix
 #data = pickle.load( open( "datamat.p", "rb" ) )
 #target = pickle.load( open( "targetvec.p", "rb" ) )
