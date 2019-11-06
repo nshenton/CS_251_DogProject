@@ -1,61 +1,67 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 12 14:57:15 2019
+Created on Tue Nov  5 16:32:16 2019
 
 @author: luket
 """
-#https://www.tensorflow.org/tutorials/keras/basic_classification
-from __future__ import absolute_import, division, print_function, unicode_literals
-from sklearn.model_selection import train_test_split
-from sklearn.decomposition import PCA
-import tensorflow as tf
-import pandas as pd
-from tensorflow import keras
+import IPython.display as display
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
-print(tf.__version__)
-import os
-import PIL
-from matplotlib import image
-import time as time
-import pickle
-from keras import metrics
-import random
-import pickle
-import os
-#end import section
-#how many breeds to build into the classifier
-#generate directory names for specified number of breeds
-dirs = os.listdir("root_data/images/")[:]
-#for each dog breed (grouped by directory)
-for oneDir in dirs:
-    #adjust the actual folder name to index 
-    oneDir = "root_data/images/"+str(oneDir)
-    #get all the image names
-    imageNames = (os.listdir(oneDir))
-    #loop through each image
-    for imgName in imageNames:
-        #grab the image
-        img =  PIL.Image.open(oneDir + "/" + imgName)
-        print(oneDir + "/" + imgName)
-        #get the bounding box annotation
-        f = open('root_data/Annotation/' + oneDir[17:] + "/"+imgName[:-4], "r")
-        text = f.readlines()
-        xmin = 0
-        xmax = 250
-        ymin = 0
-        ymax = 250
-        for line in text:
-            if(line[4:8]=="xmin"):
-                xmin = int(line[9:len(line)-8])
-            elif(line[4:8]=="xmax"):
-                xmax = int(line[9:len(line)-8])
-            elif(line[4:8]=="ymin"):
-                ymin = int(line[9:len(line)-8])
-            elif(line[4:8]=="ymax"):
-                ymax = int(line[9:len(line)-8])
-        f.close()
-        #crop the image
-        cropped_img = img.crop((xmin,ymin,xmax,ymax))
-        #save the image
-        cropped_img.save(oneDir + "/" + imgName)
+import pathlib
+from keras.preprocessing.image import ImageDataGenerator
+#small code chunk to split folders into train/val/test
+#import split_folders
+# Split with a ratio.
+# To only split into training and validation set, set a tuple to `ratio`, i.e, `(.8, .2)`.
+#split_folders.ratio('C:/Users/luket/Desktop/CS_251_DogProject/root_data/Images/Images', output="output", seed=1337, ratio=(.8, .1, .1)) # default values
+
+#create image data generators for training and test sets
+train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True)
+
+test_datagen = ImageDataGenerator(rescale=1./255)
+
+train_generator = train_datagen.flow_from_directory(
+        "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/train",
+        target_size=(150, 150),
+        batch_size=32,
+        class_mode='categorical')
+
+validation_generator = test_datagen.flow_from_directory(
+        "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/val",
+        target_size=(150, 150),
+        batch_size=32,
+        class_mode='categorical')
+
+# define the keras model
+model = Sequential([
+    Conv2D(16, 3, padding='same', activation='relu', input_shape=(150, 150 ,3)),
+    MaxPooling2D(),
+    Conv2D(32, 3, padding='same', activation='relu'),
+    MaxPooling2D(),
+    Conv2D(64, 3, padding='same', activation='relu'),
+    MaxPooling2D(),
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dense(120, activation='sigmoid')
+])
+
+#compile the model
+model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
+
+#fit the model
+model.fit_generator(
+        train_generator,
+        steps_per_epoch=500,
+        epochs=1,
+        validation_data=validation_generator,
+        validation_steps=200)
