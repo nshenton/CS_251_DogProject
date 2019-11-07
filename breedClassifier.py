@@ -22,43 +22,41 @@ from sklearn.metrics import confusion_matrix
 
 #create image data generators for training and test sets
 shift = 0.2
+IMAGE_SIZE = 150
+BATCH_SIZE = 200
 train_datagen = ImageDataGenerator(
         rescale=1./255,
-        shear_range=0.5,
-        zoom_range=0.5,
+        shear_range=0.8,
+        zoom_range=0.8,
         horizontal_flip=True,
         rotation_range = 90)
 
-val_datagen = ImageDataGenerator(rescale=1./255,
-        shear_range=0.5,
-        zoom_range=0.5,
-        horizontal_flip=True,
-        rotation_range = 90)
+val_datagen = ImageDataGenerator(rescale=1./255)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
         "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/train",
-        target_size=(250, 250),
-        batch_size=32,
+        target_size=(IMAGE_SIZE, IMAGE_SIZE),
+        batch_size=BATCH_SIZE,
         class_mode='categorical')
 
 validation_generator = val_datagen.flow_from_directory(
         "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/val",
-        target_size=(250, 250),
-        batch_size=32,
+        target_size=(IMAGE_SIZE, IMAGE_SIZE),
+        batch_size=BATCH_SIZE,
         class_mode='categorical')
 
 # define the keras model
 model = Sequential([
-    Conv2D(16, 3, padding='same', activation='relu', input_shape=(250, 250 ,3)),
+    Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMAGE_SIZE, IMAGE_SIZE ,3)),
     MaxPooling2D(),
-    Dropout(0.4),
+    #Dropout(0.5),
     Conv2D(32, 3, padding='same', activation='relu'),
     MaxPooling2D(),
     Conv2D(64, 3, padding='same', activation='relu'),
     MaxPooling2D(),
-    Dropout(0.4),
+    #Dropout(0.5),
     Flatten(),
     Dense(512, activation='relu'),
     Dense(120, activation='sigmoid')
@@ -70,13 +68,13 @@ model.compile(optimizer='adam',
                   metrics=['accuracy'])
 
 #fit the model
-EPOCHS = 1
+EPOCHS = 2
 history = model.fit_generator(
         train_generator,
-        steps_per_epoch=10,
+        steps_per_epoch=train_generator.n//train_generator.batch_size,
         epochs=EPOCHS,
         validation_data=validation_generator,
-        validation_steps=5)
+        validation_steps=validation_generator.n//validation_generator.batch_size)
 
 #performance metrics
 acc = history.history['accuracy']
@@ -104,8 +102,8 @@ plt.show()
 #test metrics
 test_generator = test_datagen.flow_from_directory(
         "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/test",
-        target_size=(250, 250),
-        batch_size=5,
+        target_size=(IMAGE_SIZE, IMAGE_SIZE),
+        batch_size=BATCH_SIZE,
         class_mode='categorical',
         shuffle = False)
 
