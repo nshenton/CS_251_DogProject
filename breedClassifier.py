@@ -20,34 +20,38 @@ from keras.preprocessing.image import ImageDataGenerator
 #split_folders.ratio('C:/Users/luket/Desktop/CS_251_DogProject/root_data/Images/Images', output="output", seed=1337, ratio=(.8, .1, .1)) # default values
 
 #create image data generators for training and test sets
+shift = 0.2
 train_datagen = ImageDataGenerator(
         rescale=1./255,
-        shear_range=0.2,
-        zoom_range=0.2,
-        horizontal_flip=True)
+        shear_range=0.5,
+        zoom_range=0.5,
+        horizontal_flip=True,
+        rotation_range = 90)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
         "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/train",
-        target_size=(150, 150),
+        target_size=(250, 250),
         batch_size=32,
         class_mode='categorical')
 
 validation_generator = test_datagen.flow_from_directory(
         "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/val",
-        target_size=(150, 150),
+        target_size=(250, 250),
         batch_size=32,
         class_mode='categorical')
 
 # define the keras model
 model = Sequential([
-    Conv2D(16, 3, padding='same', activation='relu', input_shape=(150, 150 ,3)),
+    Conv2D(16, 3, padding='same', activation='relu', input_shape=(250, 250 ,3)),
     MaxPooling2D(),
+    Dropout(0.2),
     Conv2D(32, 3, padding='same', activation='relu'),
     MaxPooling2D(),
     Conv2D(64, 3, padding='same', activation='relu'),
     MaxPooling2D(),
+    Dropout(0.2),
     Flatten(),
     Dense(512, activation='relu'),
     Dense(120, activation='sigmoid')
@@ -59,9 +63,33 @@ model.compile(optimizer='adam',
                   metrics=['accuracy'])
 
 #fit the model
-model.fit_generator(
+EPOCHS = 3
+history = model.fit_generator(
         train_generator,
-        steps_per_epoch=500,
-        epochs=1,
+        steps_per_epoch=10,
+        epochs=EPOCHS,
         validation_data=validation_generator,
-        validation_steps=200)
+        validation_steps=5)
+
+#performance metrics
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs_range = range(EPOCHS)
+
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.show()
