@@ -1,139 +1,184 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 12 14:57:15 2019
+Created on Tue Nov  5 16:32:16 2019
 
 @author: luket
 """
-#https://www.tensorflow.org/tutorials/keras/basic_classification
-from __future__ import absolute_import, division, print_function, unicode_literals
-from sklearn.model_selection import train_test_split
-import tensorflow as tf
-from tensorflow import keras
+import IPython.display as display
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
-print(tf.__version__)
-import os
-import PIL
-from matplotlib import image
-import time as time
-import pickle
-from keras import metrics
-import random
-#end import section
-#how many breeds to build into the classifier
-BreedTotal = 6
-maxBreeds = -999
-accuracy = np.zeros(BreedTotal)
-for b in range(2,BreedTotal+2):
-    maxBreeds = b
-    #generate directory names for specified number of breeds
-    dirs = os.listdir("root_data/images/")[:maxBreeds]
-    #initialize the x dimension of the data matrix
-    matrixXDim = 0 
-    #initialize an index for which directory we are currently using
-    currentBreed = 0
-    #for each directory
-    for oneDir in dirs:
-        #count the number of images for this breed
-        oneDir = "root_data/images/"+str(oneDir)
-        imageNames = (os.listdir(oneDir))
-        numImages = len(imageNames)
-        #increment the x dimension of the data matrix
-        matrixXDim+=numImages
-        #maximum breeds for development purposes
-        currentBreed+=1
-        if currentBreed > maxBreeds:
-            break
-    #initialize the target matrix
-    y = np.zeros(matrixXDim)
-    #track the index of the target matrix for proper initialization
-    prevIndex = 0
-    #the number of the actual target (1,2,3,...)
-    targetCounter = 0
-    #for each directory of images
-    for oneDir in dirs:
-        #count the number of images
-        oneDir = "root_data/images/"+str(oneDir)
-        imageNames = (os.listdir(oneDir))
-        numImages = len(imageNames)
-        #initialize the proper number of indices to this breed in the target vector
-        y[prevIndex:(numImages+prevIndex)] = targetCounter
-        #increment the target vector
-        targetCounter+=1
-        #increment the index to start for the following breed
-        prevIndex = (numImages+prevIndex)
-    #initialize data matrix
-    dogPictureMatrix = np.zeros((matrixXDim,250,250,3))
-    #data martix index
-    i = 0
-    #max breed counter index
-    currentBreed = 0
-    #for each dog breed (grouped by directory)
-    for oneDir in dirs:
-        #adjust the actual folder name to index 
-        oneDir = "root_data/images/"+str(oneDir)
-        #get all the image names
-        imageNames = (os.listdir(oneDir))
-        #loop through each image
-        for imgName in imageNames:
-            #grab the image
-            img =  PIL.Image.open(oneDir + "/" + imgName)
-            #get the bounding box annotation
-            f = open('root_data/Annotation/' + oneDir[17:] + "/"+imgName[:-4], "r")
-            text = f.readlines()
-            xmin = 0
-            xmax = 250
-            ymin = 0
-            ymax = 250
-            for line in text:
-                if(line[4:8]=="xmin"):
-                    xmin = int(line[9:len(line)-8])
-                elif(line[4:8]=="xmax"):
-                    xmax = int(line[9:len(line)-8])
-                elif(line[4:8]=="ymin"):
-                    ymin = int(line[9:len(line)-8])
-                elif(line[4:8]=="ymax"):
-                    ymax = int(line[9:len(line)-8])
-            f.close()
-            #crop the image
-            cropped_img = img.crop((xmin,ymin,xmax,ymax))
-            #resize the image
-            resized_img = cropped_img.resize((250, 250))
-            #normalize the image
-            image_array = np.array(resized_img)
-            norm_image = image_array/255.0 # 255 = max of the value of a pixel
-            dogPictureMatrix[i] = norm_image
-            i+=1
-            currentBreed+=1
-            if currentBreed > maxBreeds:
-                break
-    #declare X to be the data matrix
-    X = dogPictureMatrix
-    #split the data into train/test/validation
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    X_train, X_val, y_train, y_val   = train_test_split(X_train, y_train, test_size=0.2, random_state=1)
-    #print the shape of the training data
-    print(X_train.shape)
-    #https://medium.com/tensorflow/hello-deep-learning-fashion-mnist-with-keras-50fcff8cd74
-    #generate the model using keras
-    model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(250, 250,3)),
-        keras.layers.Dense(128, activation=tf.nn.relu),
-        keras.layers.Dense(10, activation=tf.nn.softmax)
-    ])
-    #compile the model
-    model.compile(optimizer='adam',
-                  loss='sparse_categorical_crossentropy',
+import pathlib
+from keras.preprocessing.image import ImageDataGenerator
+from sklearn.metrics import confusion_matrix
+from tensorflow.keras.constraints import max_norm
+from sklearn.utils.multiclass import unique_labels
+#small code chunk to split folders into train/val/test
+#import split_folders
+# Split with a ratio.
+# To only split into training and validation set, set a tuple to `ratio`, i.e, `(.8, .2)`.
+#split_folders.ratio('C:/Users/luket/Desktop/CS_251_DogProject/root_data/Images/Images', output="output", seed=1337, ratio=(.8, .1, .1)) # default values
+
+#create image data generators for training and test sets
+shift = 0.2
+IMAGE_SIZE = 150
+BATCH_SIZE = 300
+train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.8,
+        zoom_range=0.8,
+        horizontal_flip=True,
+        rotation_range = 90)
+
+val_datagen = ImageDataGenerator(rescale=1./255)
+
+test_datagen = ImageDataGenerator(rescale=1./255)
+
+train_generator = train_datagen.flow_from_directory(
+        "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/train",
+        target_size=(IMAGE_SIZE, IMAGE_SIZE),
+        batch_size=BATCH_SIZE,
+        class_mode='categorical')
+
+validation_generator = val_datagen.flow_from_directory(
+        "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/val",
+        target_size=(IMAGE_SIZE, IMAGE_SIZE),
+        batch_size=BATCH_SIZE,
+        class_mode='categorical')
+
+# define the keras model
+model = Sequential([
+    Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMAGE_SIZE, IMAGE_SIZE ,3)),
+    MaxPooling2D(),
+    Dropout(0.5),
+    Conv2D(32, 3, padding='same', activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)),
+    MaxPooling2D(),
+    Conv2D(64, 3, padding='same', activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)),
+    MaxPooling2D(),
+    Dropout(0.5),
+    Flatten(),
+    Dense(512, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)),
+    Dense(120, activation='sigmoid')
+])
+
+#compile the model
+model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
                   metrics=['accuracy'])
-    #fit the model
-    results = model.fit(X_train, y_train, epochs=2)
-    #get the accuracy of the last epoch
-    accuracy[b-2]=(results.history.get('acc')[-1])
-plt.figure(figsize=(12,8))
-plt.plot(accuracy)
-plt.xlabel("Number of Breeds Trained On",fontsize = 15)
-plt.ylabel("Weighted Precision & Recall",fontsize = 15)
-plt.title("Increasing Task Difficulty",fontsize = 20)
-plt.savefig("results1.png")
-#dump out the trained model
-#model.save("dogBreedRegression.m")
+
+#fit the model
+EPOCHS = 2
+history = model.fit_generator(
+        train_generator,
+        steps_per_epoch=train_generator.n//train_generator.batch_size,
+        epochs=EPOCHS,
+        validation_data=validation_generator,
+        validation_steps=validation_generator.n//validation_generator.batch_size)
+
+#performance metrics
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs_range = range(EPOCHS)
+
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.show()
+
+#test metrics
+test_generator = test_datagen.flow_from_directory(
+        "C:/Users/luket/Desktop/CS_251_DogProject/root_data/images/test",
+        target_size=(IMAGE_SIZE, IMAGE_SIZE),
+        batch_size=1,
+        class_mode='categorical',
+        shuffle = False)
+
+test_generator.reset()
+pred=model.predict_generator(test_generator,
+steps=test_generator.n,
+verbose=1)
+
+predicted_class_indices=np.argmax(pred,axis=1)
+print(predicted_class_indices)
+
+labels = (train_generator.class_indices)
+labels = dict((v,k) for k,v in labels.items())
+predictions = [labels[k] for k in predicted_class_indices]
+
+def plot_confusion_matrix(y_true, y_pred, classes,
+                          normalize=False,
+                          title=None,
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if not title:
+        if normalize:
+            title = 'Normalized confusion matrix'
+        else:
+            title = 'Confusion matrix, without normalization'
+
+    # Compute confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+    # Only use the labels that appear in the data
+    classes = classes[unique_labels(y_true, y_pred)]
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+    ax.figure.colorbar(im, ax=ax)
+    # We want to show all ticks...
+    ax.set(xticks=np.arange(cm.shape[1]),
+           yticks=np.arange(cm.shape[0]),
+           # ... and label them with the respective list entries
+           #xticklabels=classes, yticklabels=classes,
+           title=title,
+           ylabel='True label',
+           xlabel='Predicted label')
+
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+             rotation_mode="anchor")
+
+    # Loop over data dimensions and create text annotations.
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], fmt),
+                    ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black")
+    fig.tight_layout()
+    return ax
+
+
+np.set_printoptions(precision=2)
+
+# Plot normalized confusion matrix
+plot_confusion_matrix(test_generator.classes, predicted_class_indices, classes=test_generator.classes, normalize=True,
+                      title='Normalized confusion matrix')
+
+plt.show()

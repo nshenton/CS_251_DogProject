@@ -1,4 +1,6 @@
-dogBreedRegression.m
+*.p
+*.zip
+*.m
 *.tar
 *.mat
 Annotation/
