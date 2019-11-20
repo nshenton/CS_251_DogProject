@@ -120,8 +120,7 @@ def splitAndTest(X, y, modelToUse):
     elif modelToUse == 2:
         # define the keras model
         bestModel = Sequential()
-        bestModel.add(Dense(12, input_dim=2, activation='relu'))
-        bestModel.add(Dense(8, activation='relu'))
+        bestModel.add(Dense(20, input_dim=2, activation='relu'))
         bestModel.add(Dense(4, activation='relu'))
         bestModel.add(Dense(1, activation='sigmoid'))
         bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
