@@ -30,6 +30,7 @@ from scipy.stats import uniform
 from scipy.stats import randint
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.constraints import max_norm
 # Utility function to report best scores
 #takes params results (from random search cv) and # to report (default 1)
 def report(results, n_top=1):
@@ -107,28 +108,30 @@ def splitAndTest(X, y, modelToUse):
                      "max_depth":randint(1,50)}
     
     # run randomized search
-    n_iter_search = 250
+    n_iter_search = 50
     
     if modelToUse == 0: 
         model = svm.SVC()
         random_search = RandomizedSearchCV(model, param_distributions=param_dist_svm,
-                                       n_iter=n_iter_search, cv=20, iid=False)
+                                       n_iter=n_iter_search, cv=5, iid=False)
     elif modelToUse == 1: 
         model = RandomForestClassifier(n_estimators=10)
         random_search = RandomizedSearchCV(model, param_distributions=param_dist_rf,
                                n_iter=n_iter_search, cv=5, iid=False)
     elif modelToUse == 2:
         # define the keras model
+        EPOCHS = 50
         bestModel = Sequential()
-        bestModel.add(Dense(20, input_dim=2, activation='relu'))
-        bestModel.add(Dense(4, activation='relu'))
+        bestModel.add(Dense(48, input_dim=2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+        bestModel.add(Dense(24, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+        bestModel.add(Dense(4, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
         bestModel.add(Dense(1, activation='sigmoid'))
         bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     
     #tune params and report accuracy n times
     for i in range(5):
         #split
-        X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.33, random_state=random.randint(0,10000))
+        X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=random.randint(0,10000))
         #tune parameters
         if modelToUse == 0:
             start = time()
@@ -155,7 +158,7 @@ def splitAndTest(X, y, modelToUse):
                                            min_samples_split = random_search.best_params_['min_samples_split'])
             bestModel.fit(X_train,y_train)
         elif modelToUse == 2:
-            history = bestModel.fit(X_train, y_train, epochs=500, batch_size=500, verbose = 0)
+            history = bestModel.fit(X_train, y_train, epochs=EPOCHS, batch_size=500, verbose = 0)
         # Plot the decision boundary for the test data
         #Source: https://stackoverflow.com/questions/22294241/plotting-a-decision-boundary-separating-2-classes-using-matplotlibs-pyplot
         h = .001  # step size in the mesh
@@ -169,7 +172,6 @@ def splitAndTest(X, y, modelToUse):
         # Plot the decision boundary. For that, we will assign a color to each
         # point in the mesh [x_min, m_max]x[y_min, y_max].
         Z = bestModel.predict(np.c_[xx.ravel(), yy.ravel()])
-        print(Z)
         
         # Put the result into a color plot
         Z = Z.reshape(xx.shape)
@@ -180,11 +182,11 @@ def splitAndTest(X, y, modelToUse):
             indH, accuracy = bestModel.evaluate(X_test, y_test)
             print('Accuracy: %.2f' % (accuracy*100))
             #performance metrics
-            acc = history.history['accuracy']
+            acc = history.history['acc']
             
             loss = history.history['loss']
             
-            epochs_range = range(500)
+            epochs_range = range(EPOCHS)
             
             plt.figure(figsize=(8, 8))
             plt.subplot(1, 2, 1)
