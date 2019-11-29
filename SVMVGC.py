@@ -144,7 +144,7 @@ def splitAndTest(X, y, modelToUse):
         bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     
     #tune params and report accuracy n times
-    avgOver = 50
+    avgOver = 250
     accuracyReport = np.zeros(avgOver)
     trainTestReport = np.zeros(avgOver)
     trainResults = 0.0
@@ -231,7 +231,7 @@ def splitAndTest(X, y, modelToUse):
     print(accuracyReport)
     print(trainTestReport)
     return [accuracyReport,trainTestReport]
-#X,y = generateXy()
+X,y = generateXy()
 start2 = time()
 accuracyArray = list()
 trainTestArray = list()
@@ -247,6 +247,8 @@ trainTestArray.append(returnArray[1])
 returnArray = splitAndTest(X,y,2)
 accuracyArray.append(returnArray[0])
 trainTestArray.append(returnArray[1])
+
+np.std(trainTestArray[0])
 # Create a figure instance
 fig = plt.figure(figsize=(10,5))
 
