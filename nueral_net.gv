@@ -1,0 +1,6 @@
+// nueral_net
+digraph nueral_net {
+	Input:" 2 features" -> "Dense layer with 48 nodes ReLu activation"
+	"Dense layer with 48 nodes ReLu activation" -> "Dense layer with 4 nodes ReLu activation"
+	"Dense layer with 4 nodes ReLu activation" -> "Output layer with 1 nodes Sigmoid activation"
+}

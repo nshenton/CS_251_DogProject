@@ -31,11 +31,17 @@ The task is to take dog images where each image is labeled either mixed or pure 
 
 \subsection{Dataset}
 
-The Stanford Dogs Dataset has 20,580 images each classified into one of 120 classes of dog breed. \cite{khosla2011novel} Each image also has an associated bounding box identifying the location of the dog within the photo. The mixed-breed DNA identified dog photo dataset from Voith et al. \cite{voith2009comparison} has 20 images, each paired with DNA percentage breakdown of dog breed. The final mixed breed data set a combination of the top 25 mixed dog breeds from dogfinder.com, and crowdsourcing bring the total up to \textbf{number of mixed dogs} pictures.  The final dataset was obtained by a random sampling of pure bred dogs fromthe Standard dataset equal to the length of the amount of dogs form the Stanford Dogs Dataset.  This created a dataset of \text{total number of dogs}. There are no associated bounding boxes for the Voith dataset \cite{voith2009comparison}. We will need to outfit this second dataset with bounding boxes to improve the accuracy of our classification algorithm, when the second phase of the project is reached. 
+The Stanford Dogs Dataset has 20,580 images each classified into one of 120 classes of dog breed. \cite{khosla2011novel} Each image also has an associated bounding box identifying the location of the dog within the photo. The mixed-breed DNA identified dog photo dataset from Voith et al. \cite{voith2009comparison} has 20 images, each paired with DNA percentage breakdown of dog breed. The final mixed breed data set a combination of the top 25 mixed dog breeds from dogfinder.com, and crowdsourcing bring the total up to \textbf{number of mixed dogs} pictures.  The final dataset was obtained by a random sampling of pure bred dogs fromthe Standard dataset equal to the length of the amount of dogs form the Stanford Dogs Dataset.  This created a dataset of \text{total number of dogs}. There are no associated bounding boxes for the Voith dataset \cite{voith2009comparison}. 
 
 \subsection{Algorithm Definition}
 
-First, we ultilize the Resnet50 convolutional neural network as it achieves roughly 80\% accuracy on the Standford dog dataset.  This pretrained network was trained on google imagenet so it already has been trained on the Stanford dog dataset.  Each image will be run thru this neural network, and the probablilities that the dog is a certain breed will be returned.  These probabilities give the features of the next step in the algorithm
+First, we utilize the Resnet50 convolutional neural network as it achieves roughly 80\% accuracy on the Standford dog dataset. This pretrained neural network gives a classification accuracy high enough that it should classify an image of a purebred dog correctly.  This pretrained convolutional neural network is trained on Google's ImageNet which contains the Stanford Dogs dataset. By feeding images from the mixed dog breed dataset into this pretrained neural network, the network gives the output as the probability of each dog breed. The output contains the probabilities of 1000 labels, and the algroithm will only take the labels with the top 4 highest probabilities. From here principal component analysis is used to take the four prediction outputs from the pretrained convolutional neural network down to two features.  With these two features as the input classes, a sweep of three classification methods were used SVM, random forrest, and a neural network.
+
+For the SVM classifier two techniques are used.  The first being a random sweep over a linear kernel with a C values randomized over an exponential distribution starting at 1000, and $\gamma$ values randomized over an exponential distribution starting at 2.  Other SVM algorithm has the same C and $\gamma$ sweeps but also randomly chooses a Radial Basis Function kernel or a polynomial kernel.  The random forest algorithm looks at a forest of 10 trees. Lastly the neural network uses an architecture of 3 hidden fully connected layers with the ReLu activation function.  The first layer contains 48 nodes, the second 24 nodes, and the third 4 nodes. The output layer contains one node with a sigmoid activation function.  The model was then compiled with the Adam gradient descent optimizer, and binary cross-entropy as the loss function.  The neural network was trained over 300 epochs.
+
+Cross validation is run on each model type to fit the optimal algorithm in terms of accuracy score. These four types of models were each chosen to run randomly over 200 time steps to find the optimal model from each model type.  Of these four the model with the highest accuracy score in the validation stage is chosen to be the final model.
+
+
 
 \begin{figure}[H]
 \centering{
@@ -50,14 +56,16 @@ First, we ultilize the Resnet50 convolutional neural network as it achieves roug
 
 We first generated our dataset by specifying only two breeds to classify. Each image for the corresponding dog breeds was linked with its associated bounding box, which specifies exactly where in the image the dog is located. Then, each image was converted into an array of dimension $(250,250,3)$. At this point it is important to note that the dataset is balanced, but not perfectly, meaning there are not equal numbers of images for each dog breed in the dataset but they are very similar ($\approx 150$ per breed). Having obtained our data matrix for two breeds, we normalized the pixel values from $(0,255)$ to $(0,1)$ by dividing each pixel by 255. The target vector is simple to generate, with $0$ for the first breed and $1$ for the second. We then passed each one of our images through a simple Keras neural network with three layers, using two epochs as our initial number of iterations to train the weights. Having accomplished our initial basic goal of classification, we then sought to increase the number of breeds our network could classify. For this we modularized our code to classify $N$ breeds, where we increased $N$ until our algorithm resulted in a memory error when $N=8$. If our algorithm had not resulted in a memory error, it should hypothetically work for all the breeds in our dataset.
 
+By using the r
+
 \subsection{Results}
 
 Here we display the results of training our network on an increasing number of breeds, and the resulting decrease in accuracy. The drop in accuracy is expected, because the task gets harder as there are more potential breeds any of the test images could potentially be classified as. Important to note here is that we did use cross-validation in reporting our accuracy, and that in this case, accuracy is a weighted combination of precision and recall from the Keras package. 
 
- \begin{figure}[h!]
+ \begin{figure}[H]
  \centering
-  \includegraphics[width=0.7\textwidth]{results}
-  \caption{Keras model accuracy over increasing number of breeds trained on, where 0 on the x-axis corresponds with the baseline of 2 breeds trained on.}
+  \includegraphics[width=0.7\textwidth]{testOut}
+  \caption{Keras model accuracy over increasing number of breeds trained on, where 0 on the x-axis corresponds with the baseline of 2 breeds trained on.}x
   \end{figure}
   
 \subsection{Discussion}

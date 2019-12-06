@@ -1,0 +1,21 @@
+// model
+digraph model {
+	rank=same
+	"Image Input"
+	"ResNet50 CNN"
+	"Breed Probabilities"
+	PCA
+	SVM
+	"Random Forest"
+	"Multi Layer Perceptron"
+	"Binary Classification"
+	"Image Input" -> "ResNet50 CNN"
+	"ResNet50 CNN" -> "Breed Probabilities"
+	"Breed Probabilities" -> PCA
+	PCA -> SVM
+	PCA -> "Random Forest"
+	PCA -> "Multi Layer Perceptron"
+	"Random Forest" -> "Binary Classification"
+	SVM -> "Binary Classification"
+	"Multi Layer Perceptron" -> "Binary Classification"
+}

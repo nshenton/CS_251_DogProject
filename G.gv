@@ -1,0 +1,15 @@
+// model.gv
+digraph G {
+	rank=same
+	Input
+	CNN
+	Output
+	PCA
+	SVM
+	"Binary Output"
+	Input -> CNN
+	CNN -> Output
+	Output -> PCA
+	PCA -> SVM
+	SVM -> "Binary Output"
+}

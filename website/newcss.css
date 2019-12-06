@@ -1,0 +1,48 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Sep 19, 2014, 12:38:34 AM
+    Author     : luket_000
+*/
+body{
+    background-image: url('https://ltrinity.w3.uvm.edu/cs008/assignment1.1/rsz_1image_4.jpg');
+
+    background-position: top;
+    background-repeat: repeat-y;
+    margin-left: 7.5cm;
+    margin-right: 7.5cm;
+    background-color: #ff3300
+
+}
+h1 {
+    text-align: center;
+    text-shadow: 0px 4px 4px royalblue;
+    color: white;
+    font: 40px 'LeagueGothicRegular';
+    line-height: 100%;
+}
+a:link{
+    color: whitesmoke;
+}
+a:visited{
+    color: whitesmoke;
+}
+a:hover {
+    background: royalblue;
+
+}
+a:active {
+    color: whitesmoke;
+}
+p {
+    font-family: sans-serif;
+    color: whitesmoke;
+    text-shadow: 0px 2px 2px black;
+    text-align: center;
+    font-size: 20px;
+   text-align: left;
+   
+}
