@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Dog Distinguisher</title>
+        <meta name="author" content="Luke Trinity">
+        <meta name="description" content="A website to distinguish pure from mixed bred dogs">
+        <link href="/static/style3.css" rel="stylesheet" type="text/css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body id="sitemapbody">
+<!-- %%%%%%%%%%%%%%%%%%%%%%     Page header   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<header>
+    <h1>Dog Distinguisher</h1>
+        <nav>
+    <ol>
+        <li><a href="http://192.168.99.1:8080/sitemap.php">Home</a></li>
+    </ol>
+</nav>
+</header>
+<!-- %%%%%%%%%%%%%%%%%%%%% Ends Page header   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<fieldset class = "reviewquestions" >
+    <p class = 'large'>Our algorithm predicts your dog is pure bred!</p>
+  {% for breed in breeds %}
+    <figure>
+          <img alt="image" src={{ breed.url }} class = "animal">
+           <figcaption class = 'large'>{{ breed.name }}</figcaption> 
+    </figure>
+        <!--<li id="homeLnk">{{ breed.name }}</li>-->
+  {% endfor %}
+<!-- <img alt="image" src="luke.jpg" class = "animal" id = "pleaseFloat"> -->
+<!-- <p class = 'large'>Find out if your dog is pure or mixed breed.</p>-->
+<!-- ––<p class = 'large'>Upload a photo below!</p> -->
+</fieldset>
+<fieldset class = "newreview">
+<p class = "moderate"><a href="https://github.com/nshenton/CS_251_DogProject">Github</a></p>
+</fieldset>
+<!-- @@@@@@@@@@@@@@@@@@@@@@     Footer            @@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+<footer>
+    <h6>Web site designed by Luke Trinity.</h6>
+</footer>
+<!-- @@@@@@@@@@@@@@@@@@@@ Ends Footer             @@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+</body>
+</html>
