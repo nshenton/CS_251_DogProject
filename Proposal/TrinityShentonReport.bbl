@@ -1,0 +1,57 @@
+\begin{thebibliography}{10}
+
+\bibitem{deng2009imagenet}
+J.~Deng, W.~Dong, R.~Socher, L.-J. Li, K.~Li, and L.~Fei-Fei, ``Imagenet: A
+  large-scale hierarchical image database,'' in {\em 2009 IEEE conference on
+  computer vision and pattern recognition}, pp.~248--255, Ieee, 2009.
+
+\bibitem{khosla2011novel}
+A.~Khosla, N.~Jayadevaprakash, B.~Yao, and F.-F. Li, ``Novel dataset for
+  fine-grained image categorization: Stanford dogs,'' in {\em Proc. CVPR
+  Workshop on Fine-Grained Visual Categorization (FGVC)}, vol.~2, 2011.
+
+\bibitem{voith2009comparison}
+V.~L. Voith, E.~Ingram, K.~Mitsouras, and K.~Irizarry, ``Comparison of adoption
+  agency breed identification and dna breed identification of dogs,'' {\em
+  Journal of Applied Animal Welfare Science}, vol.~12, no.~3, pp.~253--262,
+  2009.
+
+\bibitem{liu2012dog}
+J.~Liu, A.~Kanazawa, D.~Jacobs, and P.~Belhumeur, ``Dog breed classification
+  using part localization,'' in {\em European conference on computer vision},
+  pp.~172--185, Springer, 2012.
+
+\bibitem{rajchl2016deepcut}
+M.~Rajchl, M.~C. Lee, O.~Oktay, K.~Kamnitsas, J.~Passerat-Palmbach, W.~Bai,
+  M.~Damodaram, M.~A. Rutherford, J.~V. Hajnal, B.~Kainz, {\em et~al.},
+  ``Deepcut: Object segmentation from bounding box annotations using
+  convolutional neural networks,'' {\em IEEE transactions on medical imaging},
+  vol.~36, no.~2, pp.~674--683, 2016.
+
+\bibitem{he2019bounding}
+Y.~He, C.~Zhu, J.~Wang, M.~Savvides, and X.~Zhang, ``Bounding box regression
+  with uncertainty for accurate object detection,'' in {\em Proceedings of the
+  IEEE Conference on Computer Vision and Pattern Recognition}, pp.~2888--2897,
+  2019.
+
+\bibitem{ai_goolgle2019}
+Google, ``Google ai,'' 2019.
+
+\bibitem{pedregosa2011scikit}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, {\em et~al.},
+  ``Scikit-learn: Machine learning in python,'' {\em Journal of machine
+  learning research}, vol.~12, no.~Oct, pp.~2825--2830, 2011.
+
+\bibitem{lowe2004distinctive}
+D.~G. Lowe, ``Distinctive image features from scale-invariant keypoints,'' {\em
+  International journal of computer vision}, vol.~60, no.~2, pp.~91--110, 2004.
+
+\bibitem{chollet2015keras}
+F.~Chollet {\em et~al.}, ``Keras.'' \url{https://keras.io}, 2015.
+
+\bibitem{he2015deep}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep residual learning for image
+  recognition,'' 2015.
+
+\end{thebibliography}

@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: TrinityShentonReport.aux
+The style file: ieeetr.bst
+Database file #1: dogbib.bib
+Warning--can't use both volume and number fields in khosla2011novel
+You've used 11 entries,
+            1876 wiz_defined-function locations,
+            541 strings with 5747 characters,
+and the built_in function-call counts, 3439 in all, are:
+= -- 313
+> -- 179
+< -- 0
++ -- 64
+- -- 53
+* -- 260
+:= -- 494
+add.period$ -- 11
+call.type$ -- 11
+change.case$ -- 11
+chr.to.int$ -- 0
+cite$ -- 12
+duplicate$ -- 157
+empty$ -- 314
+format.name$ -- 53
+if$ -- 818
+int.to.chr$ -- 0
+int.to.str$ -- 11
+missing$ -- 8
+newline$ -- 36
+num.names$ -- 11
+pop$ -- 49
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 119
+stack$ -- 0
+substring$ -- 235
+swap$ -- 67
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 32
+width$ -- 13
+write$ -- 106
+(There was 1 warning)
