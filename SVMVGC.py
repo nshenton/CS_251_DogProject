@@ -104,7 +104,7 @@ def generateXy():
     print(y)   
     return X,y
 #this class takes in the train and test data matrix and a param identifying what type of model to test on
-def splitAndTest(X, y, modelToUse):
+def splitAndTest(X, y, modelToUse, depth, b):
     # specify parameters and distributions to sample from (SVM)
     param_dist_svm = {"C": expon(scale=1000),
                  "gamma": expon(scale=2),
@@ -136,13 +136,27 @@ def splitAndTest(X, y, modelToUse):
     elif modelToUse == 2:
         # define the keras model
         EPOCHS = 300
-        bestModel = Sequential()
-        bestModel.add(Dense(48, input_dim=2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
-        bestModel.add(Dense(24, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
-        bestModel.add(Dense(4, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
-        bestModel.add(Dense(1, activation='sigmoid'))
-        bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    
+        if depth == 0:
+            bestModel = Sequential()
+            bestModel.add(Dense(24, input_dim=2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(12, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(1, activation='sigmoid'))
+            bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        elif depth == 1:    
+            bestModel = Sequential()
+            bestModel.add(Dense(48, input_dim=2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(24, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(4, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(1, activation='sigmoid'))
+            bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        elif depth == 2:
+            bestModel = Sequential()
+            bestModel.add(Dense(96, input_dim=2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(48, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(8, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+            bestModel.add(Dense(1, activation='sigmoid'))
+            bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     #tune params and report accuracy n times
     avgOver = 250
     accuracyReport = np.zeros(avgOver)
@@ -177,7 +191,7 @@ def splitAndTest(X, y, modelToUse):
                                            min_samples_split = random_search.best_params_['min_samples_split'])
             bestModel.fit(X_train,y_train)
         elif modelToUse == 2:
-            history = bestModel.fit(X_train, y_train, epochs=EPOCHS, batch_size=500, verbose = 0)
+            history = bestModel.fit(X_train, y_train, epochs=EPOCHS, batch_size=b, verbose = 0)
             trainResults = (history.history['acc'][-1])
         # Plot the decision boundary for the test data
         #Source: https://stackoverflow.com/questions/22294241/plotting-a-decision-boundary-separating-2-classes-using-matplotlibs-pyplot
@@ -235,20 +249,32 @@ X,y = generateXy()
 start2 = time()
 accuracyArray = list()
 trainTestArray = list()
-returnArray = splitAndTest(X,y,-1)
+#returnArray = splitAndTest(X,y,-1)
+#accuracyArray.append(returnArray[0])
+#trainTestArray.append(returnArray[1])
+#returnArray = splitAndTest(X,y,0)
+#accuracyArray.append(returnArray[0])
+#trainTestArray.append(returnArray[1])
+#returnArray = splitAndTest(X,y,1)
+#accuracyArray.append(returnArray[0])
+#trainTestArray.append(returnArray[1])
+#returnArray = splitAndTest(X,y,2)
+#accuracyArray.append(returnArray[0])
+#trainTestArray.append(returnArray[1])
+returnArray = splitAndTest(X,y,2,0, 128)
 accuracyArray.append(returnArray[0])
 trainTestArray.append(returnArray[1])
-returnArray = splitAndTest(X,y,0)
+returnArray = splitAndTest(X,y,2,1, 128)
 accuracyArray.append(returnArray[0])
 trainTestArray.append(returnArray[1])
-returnArray = splitAndTest(X,y,1)
-accuracyArray.append(returnArray[0])
-trainTestArray.append(returnArray[1])
-returnArray = splitAndTest(X,y,2)
+returnArray = splitAndTest(X,y,2,2, 128)
 accuracyArray.append(returnArray[0])
 trainTestArray.append(returnArray[1])
 
 np.std(trainTestArray[0])
+np.std(trainTestArray[1])
+np.std(trainTestArray[2])
+
 # Create a figure instance
 fig = plt.figure(figsize=(10,5))
 
@@ -257,10 +283,10 @@ ax = fig.add_axes([0,0,1,1])
 # Create the boxplot
 bp = ax.violinplot(accuracyArray)
 plt.setp(ax, xticks=[y + 1 for y in range(len(accuracyArray))],
-         xticklabels=['SVM (linear kernel)', 'SVM (optimal kernel)', 'Random Forest', 'Neural Network'])
-plt.title('Accuracy distribution by model type', fontsize = 18)
+         xticklabels=['Least deep model', 'Medium depth model', 'Deepest model'])
+plt.title('Accuracy distribution by model depth', fontsize = 18)
 ax.tick_params(labelsize=13)
-plt.savefig("testOut.png",transparent=False,dpi=100,bbox_inches = "tight")
+plt.savefig("testOut128.png",transparent=False,dpi=100,bbox_inches = "tight")
         
 plt.show()
 
@@ -272,10 +298,10 @@ ax = fig.add_axes([0,0,1,1])
 # Create the boxplot
 bp = ax.violinplot(trainTestArray)
 plt.setp(ax, xticks=[y + 1 for y in range(len(accuracyArray))],
-         xticklabels=['SVM (linear kernel)', 'SVM (optimal kernel)', 'Random Forest', 'Neural Network'])
-plt.title('Test-train accuracy distribution by model type', fontsize = 18)
+         xticklabels=['Least deep model', 'Medium depth model', 'Deepest model'])
+plt.title('Test-train accuracy distribution by model depth', fontsize = 18)
 ax.tick_params(labelsize=13)
-plt.savefig("testOut2.png",transparent=False,dpi=100,bbox_inches = "tight")
+plt.savefig("testOut1289.png",transparent=False,dpi=100,bbox_inches = "tight")
         
 plt.show()
 print(str((time() - start2)))
