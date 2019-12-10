@@ -27,6 +27,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.constraints import max_norm
 from matplotlib.colors import LinearSegmentedColormap
 import pickle
+from sklearn.metrics import confusion_matrix
 # Utility function to report best scores
 #takes params results (from random search cv) and # to report (default 1)
 def report(results, n_top=1):
@@ -105,13 +106,13 @@ pca.transform(np.array([0.0,0.9,0.4,0.8]).reshape(-1,1))
 # define the keras model
 EPOCHS = 300
 bestModel = Sequential()
-bestModel.add(Dense(48, input_dim=2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
-bestModel.add(Dense(24, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
-bestModel.add(Dense(4, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+bestModel.add(Dense(96, input_dim=2, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+bestModel.add(Dense(48, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
+bestModel.add(Dense(8, activation='relu',kernel_constraint=max_norm(3), bias_constraint=max_norm(3)))
 bestModel.add(Dense(1, activation='sigmoid'))
 bestModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=2)
-history = bestModel.fit(X_train, y_train, epochs=EPOCHS, batch_size=500, verbose = 1)
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.33, random_state=2)
+history = bestModel.fit(X_train, y_train, epochs=EPOCHS, batch_size=128, verbose = 0)
 bestModel.evaluate(X_test, y_test)
 
 # Plot the decision boundary
@@ -123,7 +124,7 @@ plt.rc('ytick',labelsize=20)
 plt.xlabel('Principal Component 1',fontsize = 25)
 plt.ylabel('Principal Component 2',fontsize = 25)
 h=0.01
-x_min, x_max = X[:,0].min()-0.01, X[:,0].max()+.01
+x_min, x_max = X[:,0].min()-0.01, X[:,0].max()+.02
 y_min, y_max = X[:,1].min()-.01, X[:,1].max()+.02
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
                      np.arange(y_min, y_max, h))
@@ -147,9 +148,16 @@ left, bottom, width, height = [0.18, 0.66, 0.18, 0.2]
 ax2 = fig.add_axes([left, bottom, width, height])
 ax2.scatter(X[idx2 ,0], X[idx2,1], c='blue', edgecolor='k', s=20, label = 'mixed', alpha = 0.5)
 ax2.scatter(X[idx ,0], X[idx,1], c='red', edgecolor='k', s=20, label = 'pure', alpha = 0.5)
-ax2.set_xlim(-0.3169,-0.3)
+ax2.set_xlim(-0.34,-0.32)
 ax2.set_ylim(-0.03,-0.02)
 ax2.contourf(xx, yy, Z, colors=myColors,alpha=.1)
-plt.savefig("decboundary.png",transparent=False,dpi=100,bbox_inches = "tight")
+plt.savefig("decboundary22.png",transparent=False,dpi=100,bbox_inches = "tight")
 plt.show()
+predicts = bestModel.predict(X_test)
+for i in range(predicts.shape[0]):
+    if predicts[i]>0.5:
+        predicts[i] = 1
+    else:
+        predicts[i] = 0
+confusion_matrix(predicts, y_test)
 #bestModel.save("bestModel.h5")
