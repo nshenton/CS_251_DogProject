@@ -122,7 +122,7 @@ The decision boundary of the used in first testing suite neural network is found
 The results of the neural network testing suite are shown in figure 7. 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{testOut1289}
+\includegraphics[width=0.7\textwidth]{testOut128}
 \caption{The violin plot shows the distribution of testing accuracy of each neural network type from the testing sweep.}
 \end{figure}
 The numeric results of the testing suite are found in the table below.  
@@ -141,7 +141,7 @@ Deepest (96-\textgreater{}48-\textgreater{}8-\textgreater{}1)      & 0.7966 & 0.
 Figure 8 gives the $\text{Accuracy}_{\text{Testing}} - \text{Accuracy}_{\text{Training}}$ of each neural network. 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{testOut128}
+\includegraphics[width=0.7\textwidth]{testOut1289}
 \caption{The violin plot shows the distribution of the $\text{Accuracy}_{\text{Testing}} - \text{Accuracy}_{\text{Training}}$
 for each neural network. }
 \end{figure}
@@ -161,7 +161,11 @@ Deepest (96-\textgreater{}48-\textgreater{}8-\textgreater{}1)      & -0.102 & 0.
 
 \subsection{Discussion}
 
-From the testing suite, the neural network algorithm above shows that the 
+From the testing suite in figure 4, the neural network described in figure 2 shows had the highest accuracy on the testing set.  This had a mean accuracy of 78\% with a standard deviation of 0.028.  This is performed better than any of the other models tested in the suite.  The neural network did overfit the most, as shown in figure 5.  Even with this overfitting the neural network performed the best. 
+
+Figure 6 shows the accuracy of the testing suite used on the three neural network structures defined earlier.  The figure shows that the deepest model had the best accuracy, but the mean accuracy only shows that here is a 0.67\% difference between the least amount of nodes versus the most.  In terms of the accuracy there is not much difference between the models.  Based on the size of the dataset and the test train split where only 176 samples are in the testing set this difference in accuracy only accounts for a difference of 1 image. This shows that the depth of the neural networks does not change the accuracy much based on dataset provided.  Figure 7 shows that the deepest neural network overfits the most, but does not provide that much difference in terms of accuracy from the other two network structures.
+
+
 
 \section{Related Work}
 
