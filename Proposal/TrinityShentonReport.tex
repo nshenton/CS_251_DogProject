@@ -79,13 +79,40 @@ Here are the results of the initial testing suite. Figure 4 shows the distributi
 \includegraphics[width=0.7\textwidth]{testOut}
 \caption{The violin plot shows the distribution of testing accuracy of each model type from the testing sweep.}
 \end{figure}
-Figure 4 shows that SVM with linear kernel, SVM with a non-linear kernel, and random forests perform about the same, but the neural network with the architecture shown in figure 1 gives the best accuracy. Figure 5 gives the $\text{Accuracy}_{\text{Testing}} - \text{Accuracy}_{\text{Training}}$ for each model. This gives a representation of the overfitting and under-fitting the models could be experiencing. Here it seems that the neural network is overfitting the data with the mostly negative values.
+Figure 4 shows that SVM with linear kernel, SVM with a non-linear kernel, and random forests perform about the same, but the neural network with the architecture shown in figure 1 gives the best accuracy. The table gives the numeric results of this suite.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|l|l}
+\hline
+\multicolumn{1}{|l|}{Model Type} & Mean  & \multicolumn{1}{l|}{Standard Deviation} \\ \hline
+SVM (linear kernel)              & 0.747 & 0.026                                   \\
+SVM (optimal kernel)             & 0.753 & 0.024                                   \\
+Random Forest                    & 0.742 & 0.030                                   \\
+Multi Layer Perceptron           & 0.780 & 0.028                                  
+\end{tabular}
+\end{table}
+Figure 5 gives the $\text{Accuracy}_{\text{Testing}} - \text{Accuracy}_{\text{Training}}$ for each model. This gives a representation of the overfitting and under-fitting the models could be experiencing. Here it seems that the neural network is overfitting the data with the mostly negative values.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{testOut2}
 \caption{The violin plot shows the distribution of the $\text{Accuracy}_{\text{Testing}} - \text{Accuracy}_{\text{Training}}$
 for each model. }
 \end{figure}
+The numeric results of the different between the testing and training is found in the table below.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|l|l}
+\hline
+\multicolumn{1}{|l|}{Model Type} & Mean   & \multicolumn{1}{l|}{Standard Deviation} \\ \hline
+SVM (linear kernel)              & -0.003 & 0.039                                   \\
+SVM (optimal kernel)             & -0.014 & 0.036                                   \\
+Random Forest                    & -0.022 & 0.039                                   \\
+Multi Layer Perceptron           & -0.080 & 0.039                                  
+\end{tabular}
+\end{table}
+
 The decision boundary of the used in first testing suite neural network is found in figure 6. 
 \begin{figure}[H]
 \centering
@@ -98,6 +125,19 @@ The results of the neural network testing suite are shown in figure 7.
 \includegraphics[width=0.7\textwidth]{testOut1289}
 \caption{The violin plot shows the distribution of testing accuracy of each neural network type from the testing sweep.}
 \end{figure}
+The numeric results of the testing suite are found in the table below.  
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|l|l}
+\hline
+\multicolumn{1}{|l|}{Model Type}                                   & Mean   & \multicolumn{1}{l|}{Standard Deviation} \\ \hline
+Least Deep (24-\textgreater{}12-\textgreater{}2-\textgreater{}1)   & 0.7899 & 0.027                                   \\
+Medium Depth (48-\textgreater{}24-\textgreater{}4-\textgreater{}1) & 0.7863 & 0.025                                   \\
+Deepest (96-\textgreater{}48-\textgreater{}8-\textgreater{}1)      & 0.7966 & 0.030                                  
+\end{tabular}
+\end{table}
+
 Figure 8 gives the $\text{Accuracy}_{\text{Testing}} - \text{Accuracy}_{\text{Training}}$ of each neural network. 
 \begin{figure}[H]
 \centering
@@ -106,9 +146,22 @@ Figure 8 gives the $\text{Accuracy}_{\text{Testing}} - \text{Accuracy}_{\text{Tr
 for each neural network. }
 \end{figure}
 
+The numeric results of figure 8 are shown in the table below.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|l|l}
+\hline
+\multicolumn{1}{|l|}{Model Type}                                   & Mean   & \multicolumn{1}{l|}{Standard Deviation} \\ \hline
+Least Deep (24-\textgreater{}12-\textgreater{}2-\textgreater{}1)   & -0.027 & 0.035                                   \\
+Medium Depth (48-\textgreater{}24-\textgreater{}4-\textgreater{}1) & -0.055 & 0.037                                   \\
+Deepest (96-\textgreater{}48-\textgreater{}8-\textgreater{}1)      & -0.102 & 0.042                                  
+\end{tabular}
+\end{table}
+
 \subsection{Discussion}
 
-Here the model shows the 
+From the testing suite, the neural network algorithm above shows that the 
 
 \section{Related Work}
 

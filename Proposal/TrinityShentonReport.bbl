@@ -32,14 +32,17 @@ M.~Rajchl, M.~C. Lee, O.~Oktay, K.~Kamnitsas, J.~Passerat-Palmbach, W.~Bai,
   convolutional neural networks,'' {\em IEEE transactions on medical imaging},
   vol.~36, no.~2, pp.~674--683, 2016.
 
+\bibitem{kaggledogs}
+Kaggle, ``Dog breed identification,'' 2017.
+
+\bibitem{ai_goolgle2019}
+Google, ``Google ai,'' 2019.
+
 \bibitem{he2019bounding}
 Y.~He, C.~Zhu, J.~Wang, M.~Savvides, and X.~Zhang, ``Bounding box regression
   with uncertainty for accurate object detection,'' in {\em Proceedings of the
   IEEE Conference on Computer Vision and Pattern Recognition}, pp.~2888--2897,
   2019.
-
-\bibitem{ai_goolgle2019}
-Google, ``Google ai,'' 2019.
 
 \bibitem{pedregosa2011scikit}
 F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
@@ -53,8 +56,5 @@ D.~G. Lowe, ``Distinctive image features from scale-invariant keypoints,'' {\em
 
 \bibitem{chollet2015keras}
 F.~Chollet {\em et~al.}, ``Keras.'' \url{https://keras.io}, 2015.
-
-\bibitem{kaggledogs}
-Kaggle, ``Dog breed identification,'' 2017.
 
 \end{thebibliography}

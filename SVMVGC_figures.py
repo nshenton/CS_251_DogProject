@@ -79,8 +79,9 @@ def generatePredictions(outputArray, path, first, localLen, localModel):
 #this method generates X and y to test models
 def generateXy():
     #paths to images
-    pure_img_paths = glob.glob("root_data/images/Images/*/*.jpg")
+    pure_img_paths = glob.glob("root_data/images/Images/*/*")
     mixed_img_paths = glob.glob("root_data/images/mixed/*")
+    print(mixed_img_paths)
     random.shuffle(pure_img_paths)
     random.shuffle(mixed_img_paths)
     print('Pure Data Set Size:', len(pure_img_paths))
@@ -101,7 +102,7 @@ def generateXy():
     print(X[0:2])
     y = np.ones(arrayLen)
     y[int(arrayLen/2):arrayLen] = 0
-    print(y)   
+    #print(y)   
     return X,y
 #this class takes in the train and test data matrix and a param identifying what type of model to test on
 def splitAndTest(X, y, modelToUse):
@@ -236,7 +237,7 @@ X,y = generateXy()
 #%%
 
 print(X[:, 0])
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(fig_size = (20,10))
 scatter = ax.scatter(X[: ,0], X[:,1], c=y, cmap=plt.cm.Spectral,
                     edgecolor='k', s=40, handles = ['pure','mixed'])
 ax.legend()
